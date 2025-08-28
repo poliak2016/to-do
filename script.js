@@ -1,0 +1,1 @@
+const textForm = document.getElementById("text-form")
