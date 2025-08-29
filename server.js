@@ -9,6 +9,4 @@ app.listen(port, function(error){
   } else {
     console.log('server work properly')
   }
-
-  
 })
