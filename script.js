@@ -2,15 +2,38 @@ const textForm = document.getElementById("text-form");
 const saveBtn = document.getElementById("save");
 const output = document.getElementById("output");
 
+let todoList = [];
+
+load();
+
 saveBtn.addEventListener('click', () => {
   const text = textForm.value.trim();
 
   if(!text) {
     return alert("enter any text");
   }
+  const todo ={
+    id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
+    text,
+    done: false
+  }
+  todoList.push(todo);
+  textForm.value ="";
+  save();
+  render();
 
-  const li = document.createElement("li");
-  li.textContent = text;
-  output.appendChild(li)
-});
+})
+output.addEventListener('click', (e) => {
 
+  if (e.target.matches('input[type="checkbox"]')) {
+
+    const li = e.target.closest('li');
+    const id = li.dataset.id;
+    const todo = todoList.find(todo => todo.id === id);
+
+    const t = todoList.find(todo => todo.id === id);
+    if (t) t.done = e.target.checked;
+    
+    save();
+  }
+})
