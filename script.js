@@ -4,6 +4,19 @@ const output = document.getElementById("output");
 
 let todoList = [];
 
+const storageKey = "todos";
+
+const save = () => {
+  localStorage.setItem(storageKey, JSON.stringify(todoList))
+};
+
+const load = () => {
+  const data = localStorage.getItem(storageKey);
+  if (data) {
+    todoList = JSON.parse(data)
+  }
+}
+
 load();
 
 saveBtn.addEventListener('click', () => {
@@ -23,14 +36,15 @@ saveBtn.addEventListener('click', () => {
   render();
 
 })
-output.addEventListener('click', (e) => {
+
+output.addEventListener('change', (e) => {
 
   if (e.target.matches('input[type="checkbox"]')) {
 
+    if(!checkbox) return;
+
     const li = e.target.closest('li');
     const id = li.dataset.id;
-    const todo = todoList.find(todo => todo.id === id);
-
     const t = todoList.find(todo => todo.id === id);
     if (t) t.done = e.target.checked;
     
