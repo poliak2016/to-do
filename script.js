@@ -6,19 +6,55 @@ let todoList = [];
 
 const storageKey = "todos";
 
+// saving function
+
 const save = () => {
-  localStorage.setItem(storageKey, JSON.stringify(todoList))
+  try{
+    localStorage.setItem(storageKey, JSON.stringify(todoList))
+  } catch(error){
+    console.error("error saving", error)
+  }
 };
 
+// loading function
+
 const load = () => {
-  const data = localStorage.getItem(storageKey);
-  if (data) {
-    todoList = JSON.parse(data)
+  try{
+    const data = localStorage.getItem(storageKey);
+    if (data) {
+      todoList = JSON.parse(data)
+    }
+  } catch(error){
+    console.error("error loading", error)
   }
 }
 
-load();
+// rendering function
 
+const render =  () => {
+  output.innerHTML = "";
+
+  for(t of todoList) {
+    const li = document.createElement("li");
+    li.dataset.id = t.id;
+    if (t.done){
+      li.classList.add("done");
+    }
+    const label = document.createElement("label");
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = t.done;
+
+    const span = document.createElement("span");
+    span.textContent = t.text;
+
+    label.appendChild(checkbox);
+    label.appendChild(span);
+    li.appendChild(label);
+    output.appendChild(li);
+  }
+}
+ 
 saveBtn.addEventListener('click', () => {
   const text = textForm.value.trim();
 
@@ -50,4 +86,7 @@ output.addEventListener('change', (e) => {
     
     save();
   }
-})
+});
+
+load();
+render();
