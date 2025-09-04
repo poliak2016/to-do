@@ -51,7 +51,7 @@ const render =  () => {
     const edit = document.createElement("button");
     edit.textContent = "edit"
     edit.id = `edit-${t.id}`
-    edit.addEventListener("click", () = edit(t.id))
+    edit.addEventListener("click", () => editTodo(t.id))
 
     label.appendChild(checkbox);
     label.appendChild(span);
@@ -79,13 +79,15 @@ saveBtn.addEventListener('click', () => {
   render();
 });
 
-const editBtn = (id) => {
+const editTodo = (id) => {
   const todo = todoList.find (t => t.id === id);
   if(!todo) return
 
   const newText = prompt ("Edit task", todo.text)
+  
   if (newText) {
-    todo.text = text;
+    todo.text = newText;
+    save()
     render();
   }
 }
