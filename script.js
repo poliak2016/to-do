@@ -1,6 +1,7 @@
 const textForm = document.getElementById("text-form");
-const saveBtn = document.getElementById("save");
 const output = document.getElementById("output");
+const saveBtn = document.getElementById("save");
+// const editBtn = document.getElementById("edit");
 
 let todoList = [];
 
@@ -34,7 +35,7 @@ const load = () => {
 const render =  () => {
   output.innerHTML = "";
 
-  for(t of todoList) {
+  for(const t of todoList) {
     const li = document.createElement("li");
     li.dataset.id = t.id;
     if (t.done){
@@ -47,13 +48,18 @@ const render =  () => {
 
     const span = document.createElement("span");
     span.textContent = t.text;
+    const edit = document.createElement("button");
+    edit.textContent = "edit"
+    edit.id = `edit-${t.id}`
+    edit.addEventListener("click", () = edit(t.id))
 
     label.appendChild(checkbox);
     label.appendChild(span);
     li.appendChild(label);
+    li.appendChild(edit)
     output.appendChild(li);
   }
-}
+};
  
 saveBtn.addEventListener('click', () => {
   const text = textForm.value.trim();
@@ -68,25 +74,21 @@ saveBtn.addEventListener('click', () => {
   }
   todoList.push(todo);
   textForm.value ="";
+
   save();
   render();
-
-})
-
-output.addEventListener('change', (e) => {
-
-  if (e.target.matches('input[type="checkbox"]')) {
-
-    if(!checkbox) return;
-
-    const li = e.target.closest('li');
-    const id = li.dataset.id;
-    const t = todoList.find(todo => todo.id === id);
-    if (t) t.done = e.target.checked;
-    
-    save();
-  }
 });
+
+const editBtn = (id) => {
+  const todo = todoList.find (t => t.id === id);
+  if(!todo) return
+
+  const newText = prompt ("Edit task", todo.text)
+  if (newText) {
+    todo.text = text;
+    render();
+  }
+}
 
 load();
 render();
