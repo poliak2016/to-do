@@ -1,7 +1,6 @@
 const textForm = document.getElementById("text-form");
 const output = document.getElementById("output");
 const saveBtn = document.getElementById("save");
-// const editBtn = document.getElementById("edit");
 
 let todoList = [];
 
@@ -48,15 +47,22 @@ const render =  () => {
 
     const span = document.createElement("span");
     span.textContent = t.text;
+    
     const edit = document.createElement("button");
-    edit.textContent = "edit"
-    edit.id = `edit-${t.id}`
-    edit.addEventListener("click", () => editTodo(t.id))
+    edit.textContent = "edit";
+    edit.id = `edit-${t.id}`;
+    edit.addEventListener("click", () => editTodo(t.id));
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "x";
+    deleteBtn.id = `delete-${t.id}`;
+    deleteBtn.addEventListener("click", () => deleteTodo(t.id));
 
     label.appendChild(checkbox);
     label.appendChild(span);
     li.appendChild(label);
-    li.appendChild(edit)
+    li.appendChild(edit);
+    li.appendChild(deleteBtn);
     output.appendChild(li);
   }
 };
@@ -90,6 +96,14 @@ const editTodo = (id) => {
     save()
     render();
   }
+};
+
+const deleteTodo = (id)=>{
+
+  todoList = todoList.filter(t => t.id !== id);
+
+  save();
+  render();
 }
 
 load();

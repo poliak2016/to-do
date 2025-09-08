@@ -1,7 +1,11 @@
 const express = require('express')
 const app = express();
-const port = 3000 ;
 
+const cors = require('cors');
+app.use(cors());
+app.use(express.json());
+
+const port = 3000;
 
 app.listen(port, function(error){
   if(error){
