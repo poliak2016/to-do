@@ -1,2 +1,3 @@
 node_modules/
 storageKey.json
+.env
