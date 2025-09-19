@@ -4,15 +4,35 @@ const saveBtn = document.getElementById("save");
 
 let todoList = [];
 
+const API = 'http://localhost:3000/api/todos';
 const storageKey = "todos";
+
+//normalize 
+const normalize = (t) =>({
+  id: t.id || t._id,
+  text: t.text,
+  done: Boolean(t.done)
+});
 
 // saving function
 
-const save = () => {
-  try{
-    localStorage.setItem(storageKey, JSON.stringify(todoList))
-  } catch(error){
-    console.error("error saving", error)
+async function saveTodos() {
+  try {
+   const res = await  fetch ('http://localhost:3000/api/todos') ;
+   const todos = await res.json();
+    console.log(todos);
+  } catch (error) {
+    console.error("error saving", error);
+  }
+}
+
+async function loadTodos() {
+  try {
+    const res = await fetch('http://localhost:3000/api/todos');
+    const todos = await res.json();
+    todoList = todos;
+  } catch (error) {
+    console.error("error loading", error);
   }
 };
 
