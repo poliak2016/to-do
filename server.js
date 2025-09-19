@@ -11,10 +11,15 @@ app.use(cors());
 app.use(express.json());
 
 const todoRoutes = require('./routes/todoRoutes');
-app.use('/todos', todoRoutes);
+app.get('/health', (_req, res) => res.json({ ok: true }));
+app.use('/api/todos', todoRoutes);
 
 mongoose.connect(process.env.MONGODB_URI)
-.then(() => console.log('DB connected'))
+.then(() => {
+  console.log('✅ DB connected');
+    console.log('DB name:', mongoose.connection.name);
+    console.log('URI host:', mongoose.connection.host, 'port:', mongoose.connection.port);
+})
 .catch((error) => console.log('DB connection error', error));
 
 const port = 3000;
