@@ -14,78 +14,66 @@ const normalize = (t) =>({
   done: Boolean(t.done)
 });
 
-// saving function
 
-async function saveTodos() {
+
+async function fetchTodo() {
   try {
-   const res = await  fetch ('http://localhost:3000/api/todos') ;
-   const todos = await res.json();
+    const res = await fetch(API); 
+    const todos = await res.json();
+    todoList = todos.map(normalize);
+  } catch (error) {
+    console.error("error fetching todos", error);
+  }
+}
+
+async function createTodo() {
+  try {
+    const res = await fetch('http://localhost:3000/api/todos', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({text})
+    });
+    const todos = await res.json();
     console.log(todos);
   } catch (error) {
     console.error("error saving", error);
   }
 }
 
-async function loadTodos() {
+async function updateTodo(id, patch) {
   try {
-    const res = await fetch('http://localhost:3000/api/todos');
-    const todos = await res.json();
-    todoList = todos;
+    const res = await fetch(`http://localhost:3000/api/todos/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(patch)
+    });
+    const updatedTodo = await res.json();
+    todoList = todoList.map(t => t.id === id ? normalize(updatedTodo) : t);
   } catch (error) {
     console.error("error loading", error);
   }
 };
 
-// loading function
-
-const load = () => {
-  try{
-    const data = localStorage.getItem(storageKey);
-    if (data) {
-      todoList = JSON.parse(data)
+async function removeTodo(id) {
+  try {
+    const res = await fetch(`http://localhost:3000/api/todos/${id}`, {
+      method: 'DELETE'
+    });
+    if (res.ok) {
+      todoList = todoList.filter(t => t.id !== id);
+    } else {
+      console.error("error removing todo", res.statusText);
     }
-  } catch(error){
-    console.error("error loading", error)
+  } catch (error) {
+    console.error("error removing todo", error);
   }
 }
 
-// rendering function
 
-const render =  () => {
-  output.innerHTML = "";
-
-  for(const t of todoList) {
-    const li = document.createElement("li");
-    li.dataset.id = t.id;
-    if (t.done){
-      li.classList.add("done");
-    }
-    const label = document.createElement("label");
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.checked = t.done;
-
-    const span = document.createElement("span");
-    span.textContent = t.text;
-    
-    const edit = document.createElement("button");
-    edit.textContent = "edit";
-    edit.id = `edit-${t.id}`;
-    edit.addEventListener("click", () => editTodo(t.id));
-
-    const deleteBtn = document.createElement("button");
-    deleteBtn.textContent = "x";
-    deleteBtn.id = `delete-${t.id}`;
-    deleteBtn.addEventListener("click", () => deleteTodo(t.id));
-
-    label.appendChild(checkbox);
-    label.appendChild(span);
-    li.appendChild(label);
-    li.appendChild(edit);
-    li.appendChild(deleteBtn);
-    output.appendChild(li);
-  }
-};
  
 saveBtn.addEventListener('click', () => {
   const text = textForm.value.trim();
@@ -125,6 +113,44 @@ const deleteTodo = (id)=>{
   save();
   render();
 }
+
+// rendering function
+
+const render =  () => {
+  output.innerHTML = "";
+
+  for(const t of todoList) {
+    const li = document.createElement("li");
+    li.dataset.id = t.id;
+    if (t.done){
+      li.classList.add("done");
+    }
+    const label = document.createElement("label");
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = t.done;
+
+    const span = document.createElement("span");
+    span.textContent = t.text;
+    
+    const edit = document.createElement("button");
+    edit.textContent = "edit";
+    edit.id = `edit-${t.id}`;
+    edit.addEventListener("click", () => editTodo(t.id));
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "x";
+    deleteBtn.id = `delete-${t.id}`;
+    deleteBtn.addEventListener("click", () => deleteTodo(t.id));
+
+    label.appendChild(checkbox);
+    label.appendChild(span);
+    li.appendChild(label);
+    li.appendChild(edit);
+    li.appendChild(deleteBtn);
+    output.appendChild(li);
+  }
+};
 
 load();
 render();
