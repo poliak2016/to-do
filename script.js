@@ -77,7 +77,8 @@ async function removeTodo(id) {
 }
 
 
- 
+ //buttons
+
 saveBtn.addEventListener('click', () => {
   const text = textForm.value.trim();
   if(!text) {
@@ -90,7 +91,10 @@ saveBtn.addEventListener('click', () => {
 
 
 
-editBtn.addEventListener('click"', () => {
+const editTodo = async (id) => {
+
+  await updateTodo(id, {done: !todo.done})
+
   const todo = todoList.find (t => t.id === id);
   if(!todo) return
 
@@ -98,16 +102,12 @@ editBtn.addEventListener('click"', () => {
   
   if (newText) {
     todo.text = newText;
-    
     render();
   }
-});
+};
 
 const deleteTodo = (id)=>{
-
   todoList = todoList.filter(t => t.id !== id);
-
-;
   render();
 }
 
@@ -122,11 +122,11 @@ const render =  () => {
     if (t.done){
       li.classList.add("done");
     }
+
     const label = document.createElement("label");
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     checkbox.checked = t.done;
-
     const span = document.createElement("span");
     span.textContent = t.text;
     
