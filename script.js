@@ -1,11 +1,10 @@
+const API = 'http://localhost:3000/api/todos';
 const textForm = document.getElementById("text-form");
 const output = document.getElementById("output");
 const saveBtn = document.getElementById("save");
 
 let todoList = [];
 
-const API = 'http://localhost:3000/api/todos';
-const storageKey = "todos";
 
 //normalize 
 const normalize = (t) =>({
@@ -15,10 +14,11 @@ const normalize = (t) =>({
 });
 
 
-
+//main functions
 async function fetchTodo() {
   try {
     const res = await fetch(API); 
+    if (!res.ok) throw new Error(res.statusText)
     const todos = await res.json();
     todoList = todos.map(normalize);
   } catch (error) {
@@ -26,7 +26,7 @@ async function fetchTodo() {
   }
 }
 
-async function createTodo() {
+async function createTodo(text) {
   try {
     const res = await fetch('http://localhost:3000/api/todos', {
       method: 'POST',
@@ -34,7 +34,8 @@ async function createTodo() {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({text})
-    });
+    });   
+    if (!res.ok) throw new Error(res.statusText)
     const todos = await res.json();
     console.log(todos);
   } catch (error) {
@@ -45,26 +46,28 @@ async function createTodo() {
 async function updateTodo(id, patch) {
   try {
     const res = await fetch(`http://localhost:3000/api/todos/${id}`, {
-      method: 'PATCH',
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(patch)
     });
-    const updatedTodo = await res.json();
-    todoList = todoList.map(t => t.id === id ? normalize(updatedTodo) : t);
+    if (!res.ok) throw new Error(res.statusText)
+    const updatedTodo = normalize(await res.json());
+    todoList = todoList.map(t => t.id === id ? updatedTodo : t);
   } catch (error) {
-    console.error("error loading", error);
+    console.error("error updating", error);
   }
 };
 
 async function removeTodo(id) {
   try {
-    const res = await fetch(`http://localhost:3000/api/todos/${id}`, {
+    const res = await fetch(`${API}/${id}`, {
       method: 'DELETE'
     });
     if (res.ok) {
       todoList = todoList.filter(t => t.id !== id);
+      return true;
     } else {
       console.error("error removing todo", res.statusText);
     }
@@ -77,23 +80,17 @@ async function removeTodo(id) {
  
 saveBtn.addEventListener('click', () => {
   const text = textForm.value.trim();
-
   if(!text) {
     return alert("enter any text");
   }
-  const todo ={
-    id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
-    text,
-    done: false
-  }
-  todoList.push(todo);
-  textForm.value ="";
-
-  save();
+    textForm.value = "";
+  createTodo(text).catch(err => console.error("error creating todo", err));
   render();
 });
 
-const editTodo = (id) => {
+
+
+editBtn.addEventListener('click"', () => {
   const todo = todoList.find (t => t.id === id);
   if(!todo) return
 
@@ -101,16 +98,16 @@ const editTodo = (id) => {
   
   if (newText) {
     todo.text = newText;
-    save()
+    
     render();
   }
-};
+});
 
 const deleteTodo = (id)=>{
 
   todoList = todoList.filter(t => t.id !== id);
 
-  save();
+;
   render();
 }
 
@@ -152,5 +149,7 @@ const render =  () => {
   }
 };
 
-load();
-render();
+(async () => {
+  await fetchTodo();
+  render();
+})();

@@ -23,8 +23,36 @@ async function createTodo(req, res) {
   }
 }   
 
+async function updateTodo(req, res) {
+  const { id } = req.params;
+  const { text, completed } = req.body;     
+  try {
+    const updatedTodo = await todo.findByIdAndUpdate(id, { text, completed }, { new: true });
+    if (!updatedTodo) {
+      return res.status(404).json({ message: 'Todo not found' });
+    }
+    res.status(200).json(updatedTodo);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+async function deleteTodo(req, res) {
+  const { id } = req.params;
+  try {
+    const deletedTodo = await todo.findByIdAndDelete(id);
+    if (!deletedTodo) {
+      return res.status(404).json({ message: 'Todo not found' });
+    }
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
 
 module.exports = {
   getAllTodos,
-  createTodo
+  createTodo,
+  updateTodo,
+  deleteTodo
 };

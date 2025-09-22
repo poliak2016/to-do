@@ -9,7 +9,7 @@ router.use((req, _res, next) => {
 
 router.get('/', controller.getAllTodos);
 router.post('/' , controller.createTodo);
-// router.put('/:id', controller.updateTodo);
-// router.delete('/:id', controller.deleteTodo);
+router.put('/:id', controller.updateTodo);
+router.delete('/:id', controller.deleteTodo);
 
 module.exports = router;
