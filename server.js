@@ -5,23 +5,32 @@ const cors = require('cors');
 const  mongoose = require('mongoose');
 
 
+const todoRoutes = require('./routes/todoRoutes');
+
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 
 app.get('/health', (_req, res) => res.json({ ok: true }));
 app.use('/api/todos', todoRoutes);
 
-mongoose.connect(process.env.MONGODB_URI)
+const port = 3000;
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/todo-app';
+
+//connect to db
+
+mongoose.connect(MONGODB_URI)
 .then(() => {
   console.log('✅ DB connected');
-    console.log('DB name:', mongoose.connection.name);
-    console.log('URI host:', mongoose.connection.host, 'port:', mongoose.connection.port);
+  console.log('DB name:', mongoose.connection.name);
+  console.log('URI host:', mongoose.connection.host, 'port:', mongoose.connection.port);
 })
 .catch((error) => console.log('DB connection error', error));
 
-const port = 3000;
+//start server    
 
 app.listen(port, function(error){
   if(error){

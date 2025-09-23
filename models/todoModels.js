@@ -7,5 +7,13 @@ const todoSchema = new mongoose.Schema(
   }, { timestamps: true }
 );
 
+todoSchema.set('toJSON', {
+  transform: (_document, returnedObject) => {
+    returnedObject.id = returnedObject._id;
+    delete returnedObject._id;
+    delete returnedObject.__v;
+  }
+});
+
 const todo = mongoose.model('Todo', todoSchema);
 module.exports = todo;
