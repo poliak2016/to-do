@@ -15,7 +15,10 @@ async function getAllTodos(req, res) {
 async function createTodo(req, res) {
   const { text } = req.body;
   try {
-    const newTodo = new todo({ text });
+    if (!text) {
+      return res.status(400).json({ message: "text is required" });
+    }
+    const newTodo = new todo({ text});
     await newTodo.save();
     res.status(201).json(newTodo);
   } catch (error) {
@@ -25,9 +28,9 @@ async function createTodo(req, res) {
 
 async function updateTodo(req, res) {
   const { id } = req.params;
-  const { text, completed } = req.body;     
+  const updates = req.body;     
   try {
-    const updatedTodo = await todo.findByIdAndUpdate(id, { text, completed }, { new: true });
+    const updatedTodo = await todo.findByIdAndUpdate(id, updates, { new: true });
     if (!updatedTodo) {
       return res.status(404).json({ message: 'Todo not found' });
     }
