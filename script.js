@@ -3,7 +3,7 @@ const API = 'http://localhost:3000/api/todos';
 const textForm = document.getElementById("text-form");
 const output = document.getElementById("output");
 const saveBtn = document.getElementById("save");
-
+const input = document.getElementById("text-form");
 let todoList = [];
 
 
@@ -35,7 +35,11 @@ async function createTodo(text) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({text})
-    });   
+    });
+    if (text.length < 2) {
+      alert("text is too short"); 
+      throw new Error("text is too short");
+    }
     if (!res.ok) throw new Error(res.statusText)
     const todos = normalize(await res.json());
     todoList.push(todos);
@@ -91,6 +95,13 @@ saveBtn.addEventListener('click', async (event) => {
   if(!text) return alert("enter any text");
   textForm.value = "";
   await createTodo(text).catch(err => console.error("error creating todo", err));
+});
+
+input.addEventListener("keydown", async(event) => {
+  if(event.key === "Enter") {
+    event.preventDefault();
+    saveBtn.click();
+  }
 });
 
 
