@@ -14,7 +14,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
-app.get('/health', (_req, res) => res.json({ ok: true }));
+app.get('/health', (_req, res) => {
+  logger.info("health check ok");
+  res.json({ ok: true });
+});
 app.use('/api/todos', todoRoutes);
 
 const port = 3000;
@@ -39,4 +42,3 @@ app.listen(port, function(error){
     console.log(`server work properly on port ${port}`)
   }
 });
-
