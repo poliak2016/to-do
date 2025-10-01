@@ -6,3 +6,6 @@
 2025-10-01 23:50:57 [31merror[39m: database connection failed
 2025-10-01 23:55:51 [31merror[39m: database connection failed
 2025-10-01 23:56:03 [31merror[39m: database connection failed
+2025-10-02 00:36:32 [31merror[39m: Error connecting to DB: PORT is not defined
+2025-10-02 00:39:44 [31merror[39m: Error connecting to DB: PORT is not defined
+2025-10-02 00:46:12 [31merror[39m: Error connecting to DB: PORT is not defined

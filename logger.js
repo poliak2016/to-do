@@ -20,8 +20,8 @@ const logger = createLogger({
     ]
 });
 
-logger.info("server started");
-logger.error("database connection failed");
-logger.warn("something might be wrong");
+// logger.info("server started");
+// logger.error("database connection failed");
+// logger.warn("something might be wrong");
 
 module.exports = logger;
