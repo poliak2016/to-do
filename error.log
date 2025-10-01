@@ -1,1 +1,8 @@
 {"level":"error","message":"database connection failed","timestamp":"2025-09-30T07:32:45.213Z"}
+2025-10-01 23:45:01 [31merror[39m: database connection failed
+2025-10-01 23:45:50 [31merror[39m: database connection failed
+2025-10-01 23:46:25 [31merror[39m: database connection failed
+2025-10-01 23:47:27 [31merror[39m: database connection failed
+2025-10-01 23:50:57 [31merror[39m: database connection failed
+2025-10-01 23:55:51 [31merror[39m: database connection failed
+2025-10-01 23:56:03 [31merror[39m: database connection failed

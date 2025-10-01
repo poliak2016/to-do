@@ -1,13 +1,16 @@
 const express = require('express');
 const todo = require('../models/todoModels');
+const logger = require('../logger');
 
 // Get all todos
-async function getAllTodos(req, res) {
+async function getAllTodos(req, res, next) {
   try {
     const todos = await todo.find();
+    logger.info(`Retrieved ${todos.length} todos`);
     res.status(200).json(todos);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    logger.error(`Error retrieving todos: ${error.message}`);
+    next(error);
   }
  } 
 

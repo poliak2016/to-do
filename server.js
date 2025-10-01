@@ -8,7 +8,7 @@ const  mongoose = require('mongoose');
 const todoRoutes = require('./routes/todoRoutes');
 
 const app = express();
-
+const logger = require('./logger');
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
