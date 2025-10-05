@@ -3,9 +3,6 @@ const router = express.Router();
 const controller = require('../controllers/todoControllers');
 const logger = require('../logger');
 
-// router.get('/test-error', (req, res, next) => {
-//   next(new Error("💥 Test error triggered!"));
-// });
 
 
 router.use((req, _res, next) => {

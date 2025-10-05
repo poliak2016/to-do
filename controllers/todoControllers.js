@@ -29,20 +29,37 @@ async function createTodo(req, res) {
   }
 }   
 
-async function updateTodo(req, res) {
-  const { id } = req.params;
-  const updates = req.body;     
+async function updateTodo(req, res, next) {
+    
   try {
-    const updatedTodo = await todo.findByIdAndUpdate(id, updates, { new: true });
-    if (!updatedTodo) {
+   const {id} = req.params;
+   const updates = {};
+   if (typeof req.body.done !== 'undefined') {
+     updates.done = !! req.body.done;
+   }
+    if (typeof req.body.text !== 'undefined') {
+     updates.text = String(req.body.text);
+   }
+   if(Object.keys(updates).length === 0) {
+     return res.status(400).json({ message: "No valid fields to update" });
+   }
+
+   const updateTodo = await todo.findByIdAndUpdate(
+      id,
+      { $set: updates },
+      { new: true,
+        runValidators: true,
+        context: 'query'
+       }
+   );
+    if (!updateTodo) {
       return res.status(404).json({ message: 'Todo not found' });
     }
-    res.status(200).json(updatedTodo);
+    res.status(200).json(updateTodo);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 }
-
 async function deleteTodo(req, res) {
   const { id } = req.params;
   try {
@@ -52,7 +69,7 @@ async function deleteTodo(req, res) {
     }
     res.status(204).send();
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error);
   }
 }
 
