@@ -16,19 +16,22 @@ async function getAllTodos(req, res, next) {
 
 // Create a new todo
 async function createTodo(req, res) {
-  const { text } = req.body;
+  const { text, done } = req.body;
   try {
     if (!text) {
       return res.status(400).json({ message: "text is required" });
     }
-    const newTodo = new todo({ text});
+    const newTodo = new todo({ 
+      text,
+      done: typeof done === 'boolean' ? done : false
+    });
     await newTodo.save();
     res.status(201).json(newTodo);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-}   
-
+}
+// Update an existing todo
 async function updateTodo(req, res, next) {
     
   try {
