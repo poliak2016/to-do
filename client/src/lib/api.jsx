@@ -12,8 +12,12 @@ async function request(path, option = {}) {
     throw new Error('API request failed');
   }
 
-  try { return await res.json(); } catch { return null; }
-} 
+  try {
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
 export const api = {
   get: (p) => request(p, { method: 'GET' }),
   post: (p, b) => request(p, { method: 'POST', body: JSON.stringify(b) }),
