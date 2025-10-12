@@ -7,3 +7,6 @@ export default function App() {
     </div>
   )
 }
+
+import {useEffect, useState} from "react";
+import {todos} from "./services/todos";
