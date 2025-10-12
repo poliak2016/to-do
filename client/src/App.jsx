@@ -1,3 +1,4 @@
+
 export default function App() {
   console.log('App rendered')
   return (
@@ -7,6 +8,5 @@ export default function App() {
     </div>
   )
 }
-
-import {useEffect, useState} from "react";
-import {todos} from "./services/todos";
+// import {useEffect, useState} from "react";
+// import {todos} from "./services/todos";

@@ -1,12 +1,12 @@
 {
-  "dependencies": {
-    "cors": "^2.8.5",
-    "dotenv": "^17.2.2",
-    "express": "^4.21.2",
-    "mongoose": "^8.18.1",
-    "winston": "^3.17.0"
+  "name": "todo-root",
+  "private": true,
+  "scripts": {
+    "server:dev": "npm run dev --prefix server",
+    "client:dev": "npm run dev --prefix client",
+    "dev": "concurrently \"npm:server:dev\" \"npm:client:dev\""
   },
   "devDependencies": {
-    "nodemon": "^3.1.10"
+    "concurrently": "^9.2.1"
   }
 }

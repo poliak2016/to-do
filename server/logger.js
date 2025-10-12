@@ -1,4 +1,5 @@
 const {createLogger, format, transports} = require('winston');
+const path = require('path')
 
 const devFormat = format.combine(
   format.colorize(),
