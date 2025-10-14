@@ -1,3 +1,5 @@
+import {useEffect, useState} from "react";
+import {todos} from "./services/todos";
 
 export default function App() {
   const [items, setItems] = useState([]);
@@ -40,7 +42,7 @@ async function onAdd(e){
 async function onToggle (id, done){
   try{
     setItems(prev =>  prev.map(t => t.id === id ? {...t, done} : t));
-    await todos.update(id, {done});
+    await todos.toggle(id, {done});
   } catch (e) {
     setErr(e.message);
   }
@@ -61,6 +63,7 @@ return (
 
       <form onSubmit={onAdd} style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
         <input
+       
           value={text}
           onChange={e => setText(e.target.value)}
           placeholder="Add todo..."
@@ -74,8 +77,9 @@ return (
 
       <ul style={{ listStyle: 'none', padding: 0, display: 'grid', gap: 8 }}>
         {items.map(t => (
-          <li key={t.id} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <li key={t.id} text={t.text} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <input
+              text={text}
               type="checkbox"
               checked={t.done}
               onChange={e => onToggle(t.id, e.target.checked)}
@@ -88,7 +92,5 @@ return (
         ))}
       </ul>
     </div>
-  )
-}
-// import {useEffect, useState} from "react";
-// import {todos} from "./services/todos";
+  );
+  }

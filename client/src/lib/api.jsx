@@ -8,8 +8,9 @@ async function request(path, option = {}) {
     }
   });
   if (!res.ok) {
+    const text = await res.text().catch(() => '');
     console.error('API request failed:', res);
-    throw new Error('API request failed');
+    throw new Error(text || res.statusText);
   }
 
   try {
@@ -21,6 +22,7 @@ async function request(path, option = {}) {
 export const api = {
   get: (p) => request(p, { method: 'GET' }),
   post: (p, b) => request(p, { method: 'POST', body: JSON.stringify(b) }),
+  patch: (p, b) => request(p, { method: 'PATCH', body: JSON.stringify(b) }),
   put: (p, b) => request(p, { method: 'PUT', body: JSON.stringify(b) }),
   del: (p) => request(p, { method: 'DELETE' }),
 }

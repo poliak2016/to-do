@@ -1,9 +1,12 @@
 import { api } from "../lib/api";
 
-export const todosService = {
-  getAll: () => api.get('/todos'),
-  getById: (id) => api.get(`/todos/${id}`),
-  create: (todo) => api.post('/todos', todo),
-  update: (id, todo) => api.put(`/todos/${id}`, todo),
-  delete: (id) => api.del(`/todos/${id}`),
+const base = '/api/todos';
+
+export const todos = {
+  list: () => api.get(base),
+  // getById: (id) => api.get(`${base}/${id}`),
+  create: (text) => api.post(base, { text }),
+  toggle: (id, done) => api.patch(`${base}/${id}`, { done }),
+  rename: (id, text) => api.patch(`${base}/${id}`, { text }),
+  remove: (id) => api.del(`${base}/${id}`),
 };
